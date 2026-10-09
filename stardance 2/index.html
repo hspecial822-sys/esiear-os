@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PyLearn — Module 2: Operators</title>
+<link rel="icon" type="image/png" href="assets/images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --py-blue:#4B8BBE;
+  --py-blue-glow:#6BB6F0;
+  --py-blue-dark:#3776AB;
+  --py-green:#10B981;
+  --py-green-glow:#34D399;
+  --py-green-dark:#059669;
+  --bg:#080B14;
+  --panel:rgba(255,255,255,.03);
+  --panel-2:rgba(255,255,255,.06);
+  --border:rgba(255,255,255,.08);
+  --text:#E8ECF4;
+  --text-soft:#A8B0C2;
+  --text-mute:#6B7280;
+  --red:#F87171;
+  --code-bg:#0D1117;
+  --code-bg-2:#161B22;
+  --code-border:#21262D;
+  --code-text:#E6EDF3;
+  --code-comment:#6E7681;
+  --code-keyword:#D2A8FF;
+  --code-string:#A5D6FF;
+  --code-function:#79C0FF;
+  --code-output:#7EE787;
+  --radius:14px;
+  --radius-sm:10px;
+  --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --sans:'Inter',-apple-system,'Segoe UI',sans-serif;
+  --header-h:60px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+
+body.lang-ur [data-lang="en"]:not(.lang-btn){display:none !important;}
+body.lang-en [data-lang="ur"]:not(.lang-btn){display:none !important;}
+.lang-btn[data-lang]{display:inline-flex !important;}
+
+body{
+  font-family:var(--sans);
+  color:var(--text);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  background:var(--bg);
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(800px 500px at 15% -10%, rgba(75,139,190,.18), transparent 60%),
+    radial-gradient(700px 500px at 100% 100%, rgba(16,185,129,.10), transparent 60%),
+    radial-gradient(600px 400px at 50% 50%, rgba(75,139,190,.05), transparent 70%);
+}
+
+/* HEADER */
+.header{
+  position:sticky;top:0;z-index:50;
+  height:var(--header-h);
+  background:rgba(8,11,20,.88);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:0 22px;
+}
+.header-inner{
+  max-width:1200px;height:100%;margin:0 auto;
+  display:flex;align-items:center;gap:14px;
+}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);}
+.brand-logo{
+  width:38px;height:38px;border-radius:10px;
+  background:linear-gradient(135deg,var(--py-blue),var(--py-green));
+  display:grid;place-items:center;
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 16px rgba(75,139,190,.35);
+}
+.brand-logo img{width:100%;height:100%;object-fit:contain;padding:5px;position:relative;z-index:1;}
+.brand-logo .emoji-fallback{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-size:1.2rem;z-index:0;
+}
+.brand-text strong{font-size:.92rem;font-weight:800;display:block;}
+.brand-text small{font-size:.62rem;color:var(--text-mute);font-weight:600;font-family:var(--mono);}
+
+.lang-toggle{
+  display:flex;gap:2px;padding:3px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:99px;margin-left:8px;
+}
+.lang-btn{
+  padding:5px 14px;border:none;background:transparent;
+  color:var(--text-mute);font-family:var(--mono);
+  font-size:.72rem;font-weight:700;border-radius:99px;
+  cursor:pointer;transition:all .15s;
+  letter-spacing:.08em;text-transform:uppercase;
+}
+.lang-btn:hover{color:var(--text-soft);}
+.lang-btn.active{background:var(--py-blue);color:#fff;box-shadow:0 2px 8px rgba(75,139,190,.5);}
+
+.progress{
+  margin-left:auto;
+  display:flex;align-items:center;gap:8px;
+  padding:5px 12px;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:99px;
+}
+.progress-dots{display:flex;gap:4px;}
+.progress-dots span{
+  width:7px;height:7px;border-radius:50%;
+  background:rgba(255,255,255,.1);transition:all .3s;
+}
+.progress-dots span.done{background:var(--py-blue);}
+.progress-dots span.current{background:var(--py-green);box-shadow:0 0 8px rgba(16,185,129,.8);}
+.progress-text{font-size:.68rem;font-weight:700;color:var(--text-mute);font-family:var(--mono);}
+
+/* MAIN */
+.main{
+  max-width:1200px;margin:0 auto;
+  padding:24px 22px 40px;
+  position:relative;z-index:1;
+}
+
+/* HERO */
+.hero{
+  margin-bottom:20px;padding:20px 22px;
+  background:linear-gradient(135deg,rgba(75,139,190,.1),rgba(16,185,129,.06)),var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+}
+.module-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 10px;
+  background:rgba(75,139,190,.15);
+  color:var(--py-blue-glow);
+  border:1px solid rgba(75,139,190,.35);
+  border-radius:99px;
+  font-size:.65rem;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+  margin-bottom:10px;font-family:var(--mono);
+}
+.hero h1{
+  font-size:1.8rem;font-weight:800;
+  letter-spacing:-.02em;line-height:1.15;
+  margin-bottom:10px;
+  background:linear-gradient(135deg,#FFFFFF 0%,#A8B0C2 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.meta-badges{display:flex;gap:6px;flex-wrap:wrap;}
+.badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:99px;
+  font-size:.72rem;font-weight:600;color:var(--text-soft);
+}
+
+/* TABS */
+.tabs{
+  display:flex;gap:4px;padding:5px;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--radius);margin-bottom:18px;
+}
+.tab{
+  flex:1;padding:10px 12px;
+  border:none;background:transparent;
+  color:var(--text-mute);font-family:var(--sans);
+  font-size:.84rem;font-weight:700;
+  border-radius:var(--radius-sm);cursor:pointer;
+  transition:all .18s;
+  display:flex;align-items:center;justify-content:center;
+  gap:6px;white-space:nowrap;
+}
+.tab:hover:not(.active){color:var(--text-soft);background:rgba(255,255,255,.03);}
+.tab.active{
+  background:linear-gradient(135deg,rgba(75,139,190,.25),rgba(16,185,129,.15));
+  color:var(--py-blue-glow);
+  border:1px solid rgba(75,139,190,.4);
+  box-shadow:0 4px 16px rgba(75,139,190,.2);
+}
+.tab .emoji{font-size:.95rem;}
+
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeUp .3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* TOPIC CARD */
+.topic-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  margin-bottom:16px;
+}
+.topic-header{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 18px;
+  background:var(--panel-2);
+  border-bottom:1px solid var(--border);
+}
+.topic-num{
+  width:28px;height:28px;border-radius:8px;
+  background:linear-gradient(135deg,var(--py-blue),var(--py-green));
+  color:#fff;font-family:var(--mono);font-size:.78rem;font-weight:800;
+  display:grid;place-items:center;flex-shrink:0;
+}
+.topic-header-label{
+  font-family:var(--mono);font-size:.7rem;
+  color:var(--text-mute);font-weight:700;
+  text-transform:uppercase;letter-spacing:.05em;
+}
+.topic-header-label strong{color:var(--py-blue-glow);}
+.topic-header-dots{
+  margin-left:auto;display:flex;gap:4px;
+}
+.topic-header-dots span{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,.1);
+}
+.topic-header-dots span.active{background:var(--py-blue);}
+.topic-header-dots span.done{background:var(--py-green);}
+
+.topic-body{padding:24px 22px;}
+.topic-body h2{
+  font-size:1.15rem;font-weight:800;
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.topic-body h2 .icon{
+  width:32px;height:32px;border-radius:9px;
+  background:linear-gradient(135deg,rgba(75,139,190,.2),rgba(16,185,129,.1));
+  border:1px solid rgba(75,139,190,.3);
+  display:grid;place-items:center;
+  font-size:.95rem;flex-shrink:0;
+}
+.topic-body p{
+  color:var(--text-soft);font-size:.93rem;
+  margin-bottom:14px;line-height:1.7;
+}
+.topic-body p strong{color:var(--text);font-weight:700;}
+.topic-body ul{
+  margin:0 0 16px 20px;
+  color:var(--text-soft);font-size:.91rem;
+}
+.topic-body ul li{margin-bottom:7px;line-height:1.65;}
+.topic-body ul li strong{color:var(--text);}
+.topic-body code{
+  background:rgba(75,139,190,.12);
+  padding:2px 7px;border-radius:5px;
+  font-family:var(--mono);font-size:.85em;
+  color:var(--py-blue-glow);
+  border:1px solid rgba(75,139,190,.2);
+  font-weight:500;
+}
+.topic-body pre{
+  background:var(--code-bg);
+  padding:14px 16px;
+  border-radius:var(--radius-sm);
+  font-family:var(--mono);
+  font-size:.82rem;line-height:1.7;
+  overflow-x:auto;margin-bottom:16px;
+  color:var(--code-text);
+  border:1px solid var(--code-border);
+  position:relative;
+}
+.topic-body pre::before{
+  content:'>>>';position:absolute;
+  top:8px;right:12px;
+  color:var(--py-green);
+  font-size:.68rem;font-weight:700;
+}
+.topic-body pre .cm{color:var(--code-comment);font-style:italic;}
+.topic-body pre .kw{color:var(--code-keyword);font-weight:600;}
+.topic-body pre .str{color:var(--code-string);}
+.topic-body pre .fn{color:var(--code-function);font-weight:600;}
+.topic-body pre .num{color:var(--code-output);}
+
+.op-table{
+  background:var(--code-bg);
+  border:1px solid var(--code-border);
+  border-radius:var(--radius-sm);
+  overflow:hidden;margin-bottom:16px;
+  font-family:var(--mono);font-size:.82rem;
+}
+.op-table .row{
+  display:grid;grid-template-columns:60px 1fr 1fr;
+  padding:9px 14px;
+  border-bottom:1px solid var(--code-border);
+  align-items:center;
+}
+.op-table .row:last-child{border-bottom:none;}
+.op-table .row.head{
+  background:var(--code-bg-2);
+  color:var(--py-blue-glow);
+  font-weight:700;text-transform:uppercase;
+  font-size:.68rem;letter-spacing:.05em;
+}
+.op-table .op{color:var(--py-green-glow);font-weight:700;font-size:.95rem;}
+.op-table .desc{color:var(--text-soft);}
+.op-table .ex{color:var(--code-string);}
+
+.info-box{
+  background:linear-gradient(135deg,rgba(75,139,190,.1),rgba(75,139,190,.03));
+  border:1px solid rgba(75,139,190,.25);
+  border-left:3px solid var(--py-blue);
+  border-radius:var(--radius-sm);
+  padding:13px 15px;margin:16px 0;
+  font-size:.87rem;color:var(--text-soft);
+  display:flex;gap:11px;align-items:flex-start;
+}
+.info-box .box-icon{font-size:1.15rem;flex-shrink:0;line-height:1;}
+.info-box strong{color:var(--text);display:block;margin-bottom:3px;font-size:.85rem;}
+.info-box code{
+  background:rgba(75,139,190,.15);
+  color:var(--py-blue-glow);
+  padding:1px 6px;border-radius:4px;
+  font-family:var(--mono);font-size:.85em;
+}
+
+.think-box{
+  background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(16,185,129,.02));
+  border:1px solid rgba(16,185,129,.25);
+  border-left:3px solid var(--py-green);
+  border-radius:var(--radius-sm);
+  padding:13px 15px;margin:16px 0;
+  font-size:.87rem;color:var(--text-soft);
+}
+.think-box .think-head{
+  display:flex;align-items:center;gap:8px;
+  font-weight:800;color:var(--py-green-glow);
+  margin-bottom:5px;font-size:.7rem;
+  text-transform:uppercase;letter-spacing:.06em;
+  font-family:var(--mono);
+}
+
+.topic-nav{
+  display:flex;align-items:center;gap:12px;
+  padding:16px 18px;
+  background:var(--panel-2);
+  border-top:1px solid var(--border);
+}
+.topic-nav-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 16px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);
+  color:var(--text-soft);
+  font-family:var(--sans);
+  font-size:.82rem;font-weight:700;
+  cursor:pointer;transition:all .15s;
+}
+.topic-nav-btn:hover:not(:disabled){
+  background:rgba(75,139,190,.15);
+  color:var(--py-blue-glow);
+  border-color:rgba(75,139,190,.4);
+}
+.topic-nav-btn:disabled{opacity:.25;cursor:not-allowed;}
+.topic-nav-btn.next{
+  margin-left:auto;
+  background:linear-gradient(135deg,var(--py-blue),var(--py-blue-dark));
+  color:#fff;border:none;
+  box-shadow:0 4px 14px rgba(75,139,190,.35);
+}
+.topic-nav-btn.next:hover:not(:disabled){
+  transform:translateY(-1px);
+  box-shadow:0 6px 20px rgba(75,139,190,.5);
+  background:linear-gradient(135deg,var(--py-blue),var(--py-blue-dark));
+  color:#fff;
+}
+
+.content-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:20px;
+  align-items:start;
+}
+
+/* EDITOR */
+.editor{
+  background:var(--code-bg);
+  border:1px solid var(--code-border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+}
+.editor-head{
+  display:flex;align-items:center;
+  padding:10px 14px;
+  background:var(--code-bg-2);
+  border-bottom:1px solid var(--code-border);
+  gap:8px;
+}
+.editor-dots{display:flex;gap:6px;}
+.editor-dots span{width:11px;height:11px;border-radius:50%;}
+.editor-dots span:nth-child(1){background:#FF5F57;}
+.editor-dots span:nth-child(2){background:#FEBC2E;}
+.editor-dots span:nth-child(3){background:#28C840;}
+.editor-title{
+  margin-left:10px;
+  font-family:var(--mono);
+  font-size:.72rem;color:#6E7681;
+  display:flex;align-items:center;gap:6px;
+}
+.editor-title .py-badge{
+  padding:1px 6px;
+  background:rgba(75,139,190,.25);
+  color:var(--py-blue-glow);
+  border-radius:4px;font-size:.62rem;font-weight:700;
+}
+
+.copy-btn{
+  margin-left:auto;
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 11px;
+  background:rgba(75,139,190,.12);
+  border:1px solid rgba(75,139,190,.3);
+  color:var(--py-blue-glow);
+  font-family:var(--mono);
+  font-size:.68rem;font-weight:700;
+  border-radius:6px;
+  cursor:pointer;
+  transition:all .2s cubic-bezier(.4,0,.2,1);
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+.copy-btn:hover{
+  background:rgba(75,139,190,.2);
+  border-color:rgba(75,139,190,.5);
+}
+.copy-btn.copied{
+  background:rgba(16,185,129,.18);
+  border-color:rgba(16,185,129,.5);
+  color:var(--py-green-glow);
+  animation:copyPulse .4s ease;
+}
+@keyframes copyPulse{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.08);box-shadow:0 0 20px rgba(16,185,129,.5);}
+  100%{transform:scale(1);}
+}
+
+.editor-textarea{
+  width:100%;min-height:220px;
+  padding:14px 16px;
+  background:var(--code-bg);border:none;
+  color:var(--code-text);
+  font-family:var(--mono);
+  font-size:.83rem;line-height:1.7;
+  resize:vertical;outline:none;tab-size:4;
+}
+.editor-textarea::selection{background:rgba(75,139,190,.4);}
+.editor-toolbar{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 14px;
+  background:var(--code-bg-2);
+  border-top:1px solid var(--code-border);
+  flex-wrap:wrap;
+}
+.editor-toolbar .spacer{flex:1;}
+
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 15px;border-radius:10px;border:none;
+  font-family:var(--sans);font-size:.83rem;font-weight:700;
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none !important;}
+.btn-run{
+  background:linear-gradient(135deg,var(--py-green),var(--py-green-dark));
+  color:#fff;
+  box-shadow:0 4px 14px rgba(16,185,129,.35);
+}
+.btn-run:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 20px rgba(16,185,129,.5);}
+.btn-primary{
+  background:linear-gradient(135deg,var(--py-blue),var(--py-blue-dark));
+  color:#fff;box-shadow:0 4px 14px rgba(75,139,190,.35);
+}
+.btn-primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 20px rgba(75,139,190,.5);}
+.btn-secondary{
+  background:var(--panel);color:var(--text-soft);
+  border:1px solid var(--border);
+}
+.btn-secondary:hover{background:var(--panel-2);color:var(--text);border-color:rgba(255,255,255,.15);}
+.btn-dark-ghost{
+  background:transparent;color:#8B949E;
+  border:1px solid var(--code-border);
+  padding:6px 11px;font-size:.75rem;font-family:var(--mono);
+}
+.btn-dark-ghost:hover{background:rgba(255,255,255,.05);color:#E6EDF3;}
+
+.terminal{
+  background:#010409;
+  border:1px solid var(--code-border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
+  margin-top:14px;
+}
+.terminal-head{
+  display:flex;align-items:center;
+  padding:10px 14px;
+  background:var(--code-bg-2);
+  border-bottom:1px solid var(--code-border);
+  gap:8px;
+}
+.terminal-head .dots{display:flex;gap:6px;}
+.terminal-head .dots span{width:11px;height:11px;border-radius:50%;}
+.terminal-head .dots span:nth-child(1){background:#FF5F57;}
+.terminal-head .dots span:nth-child(2){background:#FEBC2E;}
+.terminal-head .dots span:nth-child(3){background:#28C840;}
+.terminal-title{
+  margin-left:10px;
+  font-family:var(--mono);
+  font-size:.7rem;color:#6E7681;
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.terminal-status{
+  margin-left:auto;
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:.68rem;
+  color:var(--py-green-glow);
+}
+.terminal-status::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:currentColor;box-shadow:0 0 8px currentColor;
+}
+.terminal-status.error{color:var(--red);}
+.terminal-status.running{color:var(--py-blue-glow);}
+.terminal-status.loading{color:var(--text-mute);}
+.terminal-body{
+  padding:14px 18px;
+  font-family:var(--mono);
+  font-size:.8rem;line-height:1.7;
+  color:var(--code-output);
+  min-height:130px;max-height:280px;
+  overflow-y:auto;
+  white-space:pre-wrap;word-break:break-word;
+}
+.terminal-body .placeholder{color:#6E7681;font-style:italic;}
+.terminal-body .err{color:var(--red);}
+.terminal-body .success{color:var(--py-green-glow);}
+.terminal-body .divider{
+  color:#484F58;border-top:1px dashed #21262D;
+  margin:6px 0;padding-top:6px;
+  font-size:.66rem;text-transform:uppercase;
+  letter-spacing:.05em;
+}
+
+/* QUIZ */
+.quiz-header{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:20px;
+  padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+}
+.quiz-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(135deg,var(--py-blue),var(--py-green));
+  display:grid;place-items:center;
+  font-size:1.2rem;
+  box-shadow:0 4px 16px rgba(75,139,190,.4);
+  flex-shrink:0;
+}
+.quiz-header h3{font-size:1.05rem;font-weight:800;margin-bottom:2px;}
+.quiz-header p{font-size:.78rem;color:var(--text-mute);}
+
+#quizContainer {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 4px;
+  margin-bottom: 16px;
+}
+#quizContainer::-webkit-scrollbar{width:6px;}
+#quizContainer::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px;}
+
+.quiz-q{
+  background:var(--panel-2);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:16px 18px;
+  margin-bottom:14px;
+  transition:border-color .3s;
+}
+.quiz-q.correct{
+  border-color:rgba(16,185,129,.5);
+  background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(16,185,129,.02));
+}
+.quiz-q.wrong{
+  border-color:rgba(248,113,113,.5);
+  background:linear-gradient(135deg,rgba(248,113,113,.08),rgba(248,113,113,.02));
+}
+.quiz-q-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;border-radius:6px;
+  background:rgba(75,139,190,.2);
+  color:var(--py-blue-glow);
+  font-family:var(--mono);
+  font-size:.7rem;font-weight:800;
+  margin-right:8px;
+}
+.quiz-q-text{
+  font-size:.92rem;color:var(--text);font-weight:600;
+  margin-bottom:12px;
+  line-height:1.5;
+}
+.quiz-options{
+  display:flex;flex-direction:column;gap:6px;
+}
+.quiz-opt{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--border);
+  border-radius:8px;
+  color:var(--text-soft);
+  font-family:var(--mono);
+  font-size:.82rem;
+  cursor:pointer;
+  transition:all .15s;
+  text-align:left;
+  width:100%;
+}
+.quiz-opt:hover:not(:disabled){
+  background:rgba(75,139,190,.12);
+  border-color:rgba(75,139,190,.35);
+  color:var(--text);
+}
+.quiz-opt:disabled{cursor:default;}
+.quiz-opt .opt-letter{
+  width:22px;height:22px;border-radius:6px;
+  background:rgba(255,255,255,.06);
+  display:grid;place-items:center;
+  font-size:.72rem;font-weight:800;
+  flex-shrink:0;
+}
+.quiz-opt.selected-correct{
+  background:rgba(16,185,129,.15);
+  border-color:var(--py-green);
+  color:var(--py-green-glow);
+}
+.quiz-opt.selected-correct .opt-letter{background:var(--py-green);color:#fff;}
+.quiz-opt.selected-wrong{
+  background:rgba(248,113,113,.15);
+  border-color:var(--red);
+  color:var(--red);
+}
+.quiz-opt.selected-wrong .opt-letter{background:var(--red);color:#fff;}
+.quiz-opt.show-correct{
+  background:rgba(16,185,129,.1);
+  border-color:rgba(16,185,129,.4);
+  color:var(--py-green-glow);
+}
+.quiz-opt.show-correct .opt-letter{background:rgba(16,185,129,.6);color:#fff;}
+
+.quiz-result{
+  display:none;
+  margin-top:20px;
+  padding:18px 20px;
+  background:linear-gradient(135deg,rgba(75,139,190,.15),rgba(16,185,129,.1));
+  border:1px solid rgba(75,139,190,.35);
+  border-radius:var(--radius-sm);
+  text-align:center;
+  animation:fadeUp .4s ease;
+}
+.quiz-result.show{display:block;}
+.quiz-result .score-emoji{font-size:2.5rem;margin-bottom:8px;}
+.quiz-result .score-text{
+  font-size:1.15rem;font-weight:800;color:var(--text);
+  margin-bottom:4px;
+}
+.quiz-result .score-detail{
+  font-family:var(--mono);
+  font-size:.82rem;color:var(--text-soft);
+}
+.quiz-retry{
+  margin-top:14px;
+  padding:8px 18px;
+  background:var(--py-blue);
+  color:#fff;border:none;
+  border-radius:8px;
+  font-family:var(--sans);
+  font-size:.82rem;font-weight:700;
+  cursor:pointer;
+  transition:all .15s;
+}
+.quiz-retry:hover{background:var(--py-blue-dark);transform:translateY(-1px);}
+
+/* PRACTICE */
+.practice-header{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:16px;padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+}
+.practice-num{
+  width:40px;height:40px;border-radius:11px;
+  background:linear-gradient(135deg,var(--py-blue),var(--py-green));
+  display:grid;place-items:center;
+  font-size:1.05rem;font-weight:800;color:#fff;
+  flex-shrink:0;
+  box-shadow:0 4px 14px rgba(75,139,190,.4);
+}
+.practice-header h3{font-size:.98rem;font-weight:800;margin-bottom:2px;}
+.practice-header p{font-size:.78rem;color:var(--text-mute);}
+.challenge-box{
+  background:rgba(75,139,190,.06);
+  border:1px solid rgba(75,139,190,.25);
+  border-left:3px solid var(--py-blue);
+  border-radius:var(--radius-sm);
+  padding:14px 16px;margin-bottom:16px;
+  font-size:.88rem;color:var(--text-soft);
+}
+.challenge-box strong{color:var(--text);display:block;margin-bottom:5px;font-size:.86rem;}
+.challenge-box code{
+  background:rgba(75,139,190,.15);
+  color:var(--py-blue-glow);
+  padding:1px 6px;border-radius:4px;
+  font-family:var(--mono);font-size:.87em;
+}
+.practice-actions{display:flex;gap:8px;flex-wrap:wrap;}
+
+/* VIDEO */
+.video-header{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:14px;flex-wrap:wrap;
+}
+.video-header h3{font-size:.98rem;font-weight:800;}
+.video-header .lang-tag{
+  padding:3px 10px;
+  background:rgba(75,139,190,.15);
+  color:var(--py-blue-glow);
+  border:1px solid rgba(75,139,190,.3);
+  border-radius:99px;
+  font-family:var(--mono);
+  font-size:.65rem;font-weight:700;
+  letter-spacing:.05em;text-transform:uppercase;
+}
+.video-container{
+  background:#010409;
+  border:1px solid var(--code-border);
+  border-radius:var(--radius-sm);
+  overflow:hidden;
+  aspect-ratio:16/9;
+  display:grid;place-items:center;
+  margin-bottom:14px;
+}
+.video-placeholder{
+  width:100%;height:100%;
+  display:grid;place-items:center;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(75,139,190,.2), transparent 60%),
+    radial-gradient(circle at 70% 60%, rgba(16,185,129,.15), transparent 60%),
+    #010409;
+  text-align:center;color:var(--text-mute);
+  padding:30px;
+}
+.video-placeholder .ph-icon{font-size:3rem;margin-bottom:12px;opacity:.5;}
+.video-placeholder p{font-size:.88rem;margin-bottom:4px;color:var(--text-soft);}
+.video-placeholder small{font-size:.72rem;color:var(--text-mute);}
+.video-meta{
+  display:flex;gap:12px;flex-wrap:wrap;
+  font-size:.76rem;color:var(--text-mute);
+}
+.video-meta span{display:inline-flex;align-items:center;gap:5px;}
+
+/* RESPONSIVE */
+@media (max-width:900px){
+  .content-grid{grid-template-columns:1fr;gap:14px;}
+  .hero h1{font-size:1.5rem;}
+}
+
+@media (max-width:640px){
+  :root{--header-h:56px;}
+  .header{padding:0 14px;}
+  .brand-logo{width:34px;height:34px;}
+  .brand-text strong{font-size:.86rem;}
+  .brand-text small{display:none;}
+  .lang-btn{padding:4px 10px;font-size:.68rem;}
+  .progress{padding:4px 9px;}
+  .progress-dots span{width:6px;height:6px;}
+  .progress-text{display:none;}
+  .main{padding:16px 14px 30px;}
+  .hero{padding:16px 16px;}
+  .hero h1{font-size:1.3rem;}
+  .badge{font-size:.68rem;padding:3px 8px;}
+  .tabs{padding:4px;gap:3px;}
+  .tab{padding:9px 6px;font-size:.72rem;gap:4px;}
+  .tab .label-text{display:none;}
+  .tab .emoji{font-size:1.1rem;}
+  .topic-body{padding:18px 16px;}
+  .topic-body h2{font-size:1.02rem;}
+  .topic-nav{padding:12px 14px;gap:8px;}
+  .topic-nav-btn{padding:8px 13px;font-size:.76rem;}
+  .topic-nav-btn .nav-text{display:none;}
+  .op-table{font-size:.76rem;}
+  .op-table .row{grid-template-columns:50px 1fr;padding:8px 12px;}
+  .op-table .row .ex{display:none;}
+  .op-table .row.head > div:nth-child(3){display:none;}
+  .copy-btn{padding:4px 9px;font-size:.62rem;}
+  .copy-btn .copy-text{display:none;}
+  .quiz-opt{padding:9px 12px;font-size:.78rem;}
+}
+</style>
+</head>
+
+<body class="lang-ur">
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <a class="brand" href="#">
+      <div class="brand-logo">
+        <span class="emoji-fallback">🐍</span>
+        <img src="assets/images/python-logo.png" alt="Python" onerror="this.style.display='none'">
+      </div>
+      <div class="brand-text">
+        <strong>PyLearn</strong>
+        <small>Python 3.12</small>
+      </div>
+    </a>
+
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="ur">UR</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+
+    <div class="progress">
+      <div class="progress-dots" id="headerDots"></div>
+      <div class="progress-text" id="headerProgressText">1/4</div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="module-tag">🐍 MODULE 2 · OPERATORS</div>
+    <h1>Operators</h1>
+    <div class="meta-badges">
+      <span class="badge">⏱ 
+        <span data-lang="ur">8 minute</span>
+        <span data-lang="en">8 minutes</span>
+      </span>
+      <span class="badge">🌱 Beginner</span>
+      <span class="badge">📖 Theory + Practice</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" data-tab="learn">
+      <span class="emoji">📖</span>
+      <span class="label-text">
+        <span data-lang="ur">Seekho</span>
+        <span data-lang="en">Learn</span>
+      </span>
+    </button>
+    <button class="tab" data-tab="practice">
+      <span class="emoji">🎯</span>
+      <span class="label-text">Practice</span>
+    </button>
+    <button class="tab" data-tab="quiz">
+      <span class="emoji">🧠</span>
+      <span class="label-text">Quiz</span>
+    </button>
+    <button class="tab" data-tab="video">
+      <span class="emoji">🎬</span>
+      <span class="label-text">Video</span>
+    </button>
+  </div>
+
+  <!-- TAB: LEARN -->
+  <div class="tab-content active" id="tab-learn">
+    <div class="content-grid">
+      <div>
+        <div class="topic-card">
+          <div class="topic-header">
+            <div class="topic-num" id="topicNum">1</div>
+            <div class="topic-header-label">
+              Topic <strong id="topicLabel">1 of 4</strong>
+            </div>
+            <div class="topic-header-dots" id="topicDots"></div>
+          </div>
+
+          <div class="topic-body" id="topicBody"></div>
+
+          <div class="topic-nav">
+            <button class="topic-nav-btn" id="prevTopicBtn">
+              <span>←</span>
+              <span class="nav-text">
+                <span data-lang="ur">Pichla</span>
+                <span data-lang="en">Previous</span>
+              </span>
+            </button>
+            <button class="topic-nav-btn next" id="nextTopicBtn">
+              <span class="nav-text">
+                <span data-lang="ur">Agla</span>
+                <span data-lang="en">Next</span>
+              </span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="editor">
+          <div class="editor-head">
+            <div class="editor-dots"><span></span><span></span><span></span></div>
+            <span class="editor-title">
+              main.py
+              <span class="py-badge">PYTHON</span>
+            </span>
+            <button class="copy-btn" id="copyBtn" title="Copy code">
+              <span id="copyIcon">📋</span>
+              <span class="copy-text" id="copyText">Copy</span>
+            </button>
+          </div>
+          <textarea class="editor-textarea" id="codeInput" spellcheck="false"></textarea>
+          <div class="editor-toolbar">
+            <button class="btn btn-run" id="runBtn" disabled>
+              <span>▶</span> <span id="runLabel">Loading…</span>
+            </button>
+            <button class="btn btn-dark-ghost" id="resetBtn">
+              <span>↺</span> Reset
+            </button>
+            <div class="spacer"></div>
+            <span class="btn-dark-ghost" style="border:none;cursor:default;">Ctrl+↵</span>
+          </div>
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-head">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span class="terminal-title">Terminal · output</span>
+            <span class="terminal-status loading" id="termStatus">Loading…</span>
+          </div>
+          <div class="terminal-body" id="terminalBody">
+            <span class="placeholder">>>> Python engine load ho raha hai…</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: PRACTICE -->
+  <div class="tab-content" id="tab-practice">
+    <div class="topic-card">
+      <div class="topic-body">
+        <div class="practice-header">
+          <div class="practice-num">1</div>
+          <div>
+            <h3>Practice Challenge</h3>
+            <p data-lang="ur">Ek chhota kaam</p>
+            <p data-lang="en">A small task</p>
+          </div>
+        </div>
+        <div class="challenge-box">
+          <strong data-lang="ur">🎯 Tumhara kaam:</strong>
+          <strong data-lang="en">🎯 Your task:</strong>
+          <span data-lang="ur">Do numbers <code>a = 15</code> aur <code>b = 4</code> lo, print karo jama, zarb, aur baqi.</span>
+          <span data-lang="en">Take two numbers <code>a = 15</code> and <code>b = 4</code>, print their sum, product, and remainder.</span>
+        </div>
+        <div class="practice-actions">
+          <button class="btn btn-primary" onclick="switchTab('learn')">
+            <span>💻</span>
+            <span data-lang="ur">Editor mein jao</span>
+            <span data-lang="en">Go to editor</span>
+          </button>
+          <button class="btn btn-secondary" id="hintBtn" onclick="showHint()">
+            <span>💡</span>
+            <span id="hintBtnLabel">Hint</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: QUIZ -->
+  <div class="tab-content" id="tab-quiz">
+    <div class="topic-card">
+      <div class="topic-body">
+        <div class="quiz-header">
+          <div class="quiz-icon">🧠</div>
+          <div>
+            <h3>Quick Quiz</h3>
+            <p data-lang="ur">10 sawal · apna knowledge test karo!</p>
+            <p data-lang="en">10 questions · test your knowledge!</p>
+          </div>
+        </div>
+
+        <div id="quizContainer"></div>
+
+        <div class="quiz-result" id="quizResult">
+          <div class="score-emoji" id="scoreEmoji">🎉</div>
+          <div class="score-text" id="scoreText"></div>
+          <div class="score-detail" id="scoreDetail"></div>
+          <button class="quiz-retry" onclick="resetQuiz()">🔄 Retry Quiz</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: VIDEO -->
+  <div class="tab-content" id="tab-video">
+    <div class="topic-card">
+      <div class="topic-body">
+        <div class="video-header">
+          <h3>🎬 Video Lesson</h3>
+          <span class="lang-tag" id="videoLang">ROMAN URDU</span>
+        </div>
+
+        <div class="video-container">
+          <div class="video-placeholder">
+            <div class="ph-icon">🎥</div>
+            <p data-lang="ur">Video abhi upload nahi hui</p>
+            <p data-lang="en">Video not uploaded yet</p>
+            <small data-lang="ur">Jald aa rahi hai!</small>
+            <small data-lang="en">Coming soon!</small>
+          </div>
+        </div>
+
+        <div class="video-meta">
+          <span>📹 8:15</span>
+          <span>🌐 <span id="videoLangMeta">Roman Urdu</span></span>
+          <span>📖 Theory</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   TOPICS
+   ═══════════════════════════════════════════════════════ */
+const TOPICS = [
+  {
+    id: 'arith',
+    code: {
+      ur: `# Arithmetic operators demo
+a = 10
+b = 3
+
+print("a + b =", a + b)
+print("a - b =", a - b)
+print("a * b =", a * b)
+print("a / b =", a / b)
+print("a // b =", a // b)
+print("a % b =", a % b)
+print("2 ** 3 =", 2 ** 3)
+
+# Try changing a and b!`,
+      en: `# Arithmetic operators demo
+a = 10
+b = 3
+
+print("a + b =", a + b)
+print("a - b =", a - b)
+print("a * b =", a * b)
+print("a / b =", a / b)
+print("a // b =", a // b)
+print("a % b =", a % b)
+print("2 ** 3 =", 2 ** 3)
+
+# Try changing a and b!`
+    },
+    body: {
+      ur: `
+        <h2><span class="icon">➕</span>Arithmetic Operators</h2>
+        <p>Yeh <strong>math</strong> ke liye use hote hain. Jaise calculator mein <code>+ - × ÷</code>, waise hi Python mein.</p>
+
+        <div class="op-table">
+          <div class="row head"><div>Op</div><div>Kaam</div><div>Example</div></div>
+          <div class="row"><div class="op">+</div><div class="desc">Jama</div><div class="ex">5 + 3 = 8</div></div>
+          <div class="row"><div class="op">-</div><div class="desc">Tafreeq</div><div class="ex">5 - 3 = 2</div></div>
+          <div class="row"><div class="op">*</div><div class="desc">Zarb</div><div class="ex">5 * 3 = 15</div></div>
+          <div class="row"><div class="op">/</div><div class="desc">Taqseem</div><div class="ex">10 / 3 = 3.333</div></div>
+          <div class="row"><div class="op">//</div><div class="desc">Floor</div><div class="ex">10 // 3 = 3</div></div>
+          <div class="row"><div class="op">%</div><div class="desc">Baqi</div><div class="ex">10 % 3 = 1</div></div>
+          <div class="row"><div class="op">**</div><div class="desc">Power</div><div class="ex">2 ** 3 = 8</div></div>
+        </div>
+
+        <div class="info-box">
+          <div class="box-icon">💡</div>
+          <div>
+            <strong>Fark samjho</strong>
+            <code>/</code> decimal deta hai, <code>//</code> poora number.
+          </div>
+        </div>
+
+        <div class="think-box">
+          <div class="think-head">🤔 SOCHO ZARA</div>
+          17 toffee, 5 dost — har dost ko kitni, aur kitni bachegi?
+        </div>
+      `,
+      en: `
+        <h2><span class="icon">➕</span>Arithmetic Operators</h2>
+        <p>These are used for <strong>math</strong>. Just like a calculator's <code>+ - × ÷</code>.</p>
+
+        <div class="op-table">
+          <div class="row head"><div>Op</div><div>Does</div><div>Example</div></div>
+          <div class="row"><div class="op">+</div><div class="desc">Add</div><div class="ex">5 + 3 = 8</div></div>
+          <div class="row"><div class="op">-</div><div class="desc">Subtract</div><div class="ex">5 - 3 = 2</div></div>
+          <div class="row"><div class="op">*</div><div class="desc">Multiply</div><div class="ex">5 * 3 = 15</div></div>
+          <div class="row"><div class="op">/</div><div class="desc">Divide</div><div class="ex">10 / 3 = 3.333</div></div>
+          <div class="row"><div class="op">//</div><div class="desc">Floor</div><div class="ex">10 // 3 = 3</div></div>
+          <div class="row"><div class="op">%</div><div class="desc">Remainder</div><div class="ex">10 % 3 = 1</div></div>
+          <div class="row"><div class="op">**</div><div class="desc">Power</div><div class="ex">2 ** 3 = 8</div></div>
+        </div>
+
+        <div class="info-box">
+          <div class="box-icon">💡</div>
+          <div>
+            <strong>Notice</strong>
+            <code>/</code> gives decimal, <code>//</code> gives whole number.
+          </div>
+        </div>
+
+        <div class="think-box">
+          <div class="think-head">🤔 THINK</div>
+          17 candies, 5 friends — how many each, and how many left?
+        </div>
+      `
+    }
+  },
+  {
+    id: 'compare',
+    code: {
+      ur: `# Comparison operators demo
+a = 10
+b = 5
+
+print("a == b :", a == b)
+print("a != b :", a != b)
+print("a > b  :", a > b)
+print("a < b  :", a < b)
+print("a >= b :", a >= b)
+print("a <= b :", a <= b)`,
+      en: `# Comparison operators demo
+a = 10
+b = 5
+
+print("a == b :", a == b)
+print("a != b :", a != b)
+print("a > b  :", a > b)
+print("a < b  :", a < b)
+print("a >= b :", a >= b)
+print("a <= b :", a <= b)`
+    },
+    body: {
+      ur: `
+        <h2><span class="icon">⚖️</span>Comparison Operators</h2>
+        <p>Yeh <strong>compare</strong> karne ke liye. Result hamesha <code>True</code> ya <code>False</code>.</p>
+
+        <div class="op-table">
+          <div class="row head"><div>Op</div><div>Kaam</div><div>Example</div></div>
+          <div class="row"><div class="op">==</div><div class="desc">Barabar?</div><div class="ex">5 == 5 → True</div></div>
+          <div class="row"><div class="op">!=</div><div class="desc">Nahi barabar?</div><div class="ex">5 != 3 → True</div></div>
+          <div class="row"><div class="op">&gt;</div><div class="desc">Bara?</div><div class="ex">5 &gt; 3 → True</div></div>
+          <div class="row"><div class="op">&lt;</div><div class="desc">Chhota?</div><div class="ex">5 &lt; 3 → False</div></div>
+          <div class="row"><div class="op">&gt;=</div><div class="desc">Bara/barabar?</div><div class="ex">5 &gt;= 5 → True</div></div>
+          <div class="row"><div class="op">&lt;=</div><div class="desc">Chhota/barabar?</div><div class="ex">5 &lt;= 3 → False</div></div>
+        </div>
+
+        <div class="info-box">
+          <div class="box-icon">⚠️</div>
+          <div>
+            <strong>Dhyan rakho</strong>
+            <code>=</code> assignment, <code>==</code> comparison — alag hain!
+          </div>
+        </div>
+      `,
+      en: `
+        <h2><span class="icon">⚖️</span>Comparison Operators</h2>
+        <p>These <strong>compare</strong>. Result is always <code>True</code> or <code>False</code>.</p>
+
+        <div class="op-table">
+          <div class="row head"><div>Op</div><div>Does</div><div>Example</div></div>
+          <div class="row"><div class="op">==</div><div class="desc">Equal?</div><div class="ex">5 == 5 → True</div></div>
+          <div class="row"><div class="op">!=</div><div class="desc">Not equal?</div><div class="ex">5 != 3 → True</div></div>
+          <div class="row"><div class="op">&gt;</div><div class="desc">Greater?</div><div class="ex">5 &gt; 3 → True</div></div>
+          <div class="row"><div class="op">&lt;</div><div class="desc">Less?</div><div class="ex">5 &lt; 3 → False</div></div>
+          <div class="row"><div class="op">&gt;=</div><div class="desc">Greater/equal?</div><div class="ex">5 &gt;= 5 → True</div></div>
+          <div class="row"><div class="op">&lt;=</div><div class="desc">Less/equal?</div><div class="ex">5 &lt;= 3 → False</div></div>
+        </div>
+
+        <div class="info-box">
+          <div class="box-icon">⚠️</div>
+          <div>
+            <strong>Careful</strong>
+            <code>=</code> assignment, <code>==</code> comparison — different!
+          </div>
+        </div>
+      `
+    }
+  },
+  {
+    id: 'logic',
+    code: {
+      ur: `# Logical operators demo
+print("--- and ---")
+print("True and True  :", True and True)
+print("True and False :", True and False)
+
+print("\\n--- or ---")
+print("True or False  :", True or False)
+print("False or False :", False or False)
+
+print("\\n--- not ---")
+print("not True  :", not True)
+print("not False :", not False)`,
+      en: `# Logical operators demo
+print("--- and ---")
+print("True and True  :", True and True)
+print("True and False :", True and False)
+
+print("\\n--- or ---")
+print("True or False  :", True or False)
+print("False or False :", False or False)
+
+print("\\n--- not ---")
+print("not True  :", not True)
+print("not False :", not False)`
+    },
+    body: {
+      ur: `
+        <h2><span class="icon">🧠</span>Logical Operators</h2>
+        <p>Yeh <strong>multiple conditions</strong> jodne ke liye. 3 operators hain:</p>
+
+        <div class="op-table">
+          <div class="row head"><div>Op</div><div>Kaam</div><div>Example</div></div>
+          <div class="row"><div class="op">and</div><div class="desc">Dono True</div><div class="ex">T and F → False</div></div>
+          <div class="row"><div class="op">or</div><div class="desc">Ek bhi True</div><div class="ex">T or F → True</div></div>
+          <div class="row"><div class="op">not</div><div class="desc">Ulta karo</div><div class="ex">not T → False</div></div>
+        </div>
+
+        <div class="think-box">
+          <div class="think-head">🤔 SOCHO ZARA</div>
+          "Bahar jaunga agar dhoop ho AND kaam na ho."
+        </div>
+      `,
+      en: `
+        <h2><span class="icon">🧠</span>Logical Operators</h2>
+        <p>These join <strong>multiple conditions</strong>. 3 operators:</p>
+
+        <div class="op-table">
+          <div class="row head"><div>Op</div><div>Does</div><div>Example</div></div>
+          <div class="row"><div class="op">and</div><div class="desc">Both True</div><div class="ex">T and F → False</div></div>
+          <div class="row"><div class="op">or</div><div class="desc">Either True</div><div class="ex">T or F → True</div></div>
+          <div class="row"><div class="op">not</div><div class="desc">Reverse</div><div class="ex">not T → False</div></div>
+        </div>
+
+        <div class="think-box">
+          <div class="think-head">🤔 THINK</div>
+          "I'll go out if sunny AND no work."
+        </div>
+      `
+    }
+  },
+  {
+    id: 'assign',
+    code: {
+      ur: `# Assignment operators demo
+x = 10
+print("x shuru mein:", x)
+
+x += 5
+print("x += 5 →", x)
+
+x -= 3
+print("x -= 3 →", x)
+
+x *= 2
+print("x *= 2 →", x)
+
+x /= 4
+print("x /= 4 →", x)`,
+      en: `# Assignment operators demo
+x = 10
+print("x starts at:", x)
+
+x += 5
+print("x += 5 →", x)
+
+x -= 3
+print("x -= 3 →", x)
+
+x *= 2
+print("x *= 2 →", x)
+
+x /= 4
+print("x /= 4 →", x)`
+    },
+    body: {
+      ur: `
+        <h2><span class="icon">📝</span>Assignment Operators</h2>
+        <p>Variable ko <strong>value dena</strong> ya <strong>update karna</strong> asaan banate hain.</p>
+
+        <div class="op-table">
+          <div class="row head"><div>Op</div><div>Kaam</div><div>Example</div></div>
+          <div class="row"><div class="op">=</div><div class="desc">Value do</div><div class="ex">x = 5</div></div>
+          <div class="row"><div class="op">+=</div><div class="desc">Add karo</div><div class="ex">x += 3</div></div>
+          <div class="row"><div class="op">-=</div><div class="desc">Minus karo</div><div class="ex">x -= 3</div></div>
+          <div class="row"><div class="op">*=</div><div class="desc">Multiply karo</div><div class="ex">x *= 3</div></div>
+          <div class="row"><div class="op">/=</div><div class="desc">Divide karo</div><div class="ex">x /= 3</div></div>
+        </div>
+
+        <div class="info-box">
+          <div class="box-icon">💡</div>
+          <div>
+            <strong>Shortcut</strong>
+            <code>x = x + 5</code> = <code>x += 5</code>
+          </div>
+        </div>
+      `,
+      en: `
+        <h2><span class="icon">📝</span>Assignment Operators</h2>
+        <p>These make it easier to <strong>assign</strong> or <strong>update</strong> a variable.</p>
+
+        <div class="op-table">
+          <div class="row head"><div>Op</div><div>Does</div><div>Example</div></div>
+          <div class="row"><div class="op">=</div><div class="desc">Assign</div><div class="ex">x = 5</div></div>
+          <div class="row"><div class="op">+=</div><div class="desc">Add to</div><div class="ex">x += 3</div></div>
+          <div class="row"><div class="op">-=</div><div class="desc">Subtract</div><div class="ex">x -= 3</div></div>
+          <div class="row"><div class="op">*=</div><div class="desc">Multiply</div><div class="ex">x *= 3</div></div>
+          <div class="row"><div class="op">/=</div><div class="desc">Divide</div><div class="ex">x /= 3</div></div>
+        </div>
+
+        <div class="info-box">
+          <div class="box-icon">💡</div>
+          <div>
+            <strong>Shortcut</strong>
+            <code>x = x + 5</code> = <code>x += 5</code>
+          </div>
+        </div>
+      `
+    }
+  }
+];
+
+/* ═══════════════════════════════════════════════════════
+   QUIZ DATA — 10 questions
+   ═══════════════════════════════════════════════════════ */
+const QUIZ = [
+  /* Arithmetic (3) */
+  {
+    q: { ur: '10 // 3 ka result kya hoga?', en: 'What is the result of 10 // 3?' },
+    options: ['3.333', '3', '1', '30'],
+    answer: 1
+  },
+  {
+    q: { ur: '7 % 3 ka result kya hai?', en: 'What is 7 % 3?' },
+    options: ['2.33', '2', '1', '4'],
+    answer: 2
+  },
+  {
+    q: { ur: '2 ** 4 kitna hoga?', en: 'What is 2 ** 4?' },
+    options: ['8', '16', '6', '24'],
+    answer: 1
+  },
+  /* Comparison (2) */
+  {
+    q: { ur: '5 == 5 kya return karega?', en: 'What does 5 == 5 return?' },
+    options: ['True', 'False', '5', 'Error'],
+    answer: 0
+  },
+  {
+    q: { ur: '10 != 5 ka result?', en: 'What is 10 != 5?' },
+    options: ['True', 'False', '10', 'None'],
+    answer: 0
+  },
+  /* Logical (2) */
+  {
+    q: { ur: 'True and False ka result kya hai?', en: 'What is the result of True and False?' },
+    options: ['True', 'False', 'Error', 'None'],
+    answer: 1
+  },
+  {
+    q: { ur: 'True or False ka result?', en: 'What is True or False?' },
+    options: ['True', 'False', 'Error', 'None'],
+    answer: 0
+  },
+  /* Assignment (2) */
+  {
+    q: { ur: 'Agar x = 10 ho aur x += 5 karein, ab x kitna hai?', en: 'If x = 10 and we do x += 5, what is x now?' },
+    options: ['5', '10', '15', '105'],
+    answer: 2
+  },
+  {
+    q: { ur: 'x = x + 5 ka shortcut kya hai?', en: 'What is the shortcut for x = x + 5?' },
+    options: ['x == 5', 'x += 5', 'x =+ 5', 'x - 5'],
+    answer: 1
+  },
+  /* Mixed (1) */
+  {
+    q: { ur: 'Kaunsa operator baqi (remainder) nikalta hai?', en: 'Which operator gives the remainder?' },
+    options: ['/', '//', '%', '**'],
+    answer: 2
+  }
+];
+
+/* ═══════════════════════════════════════════════════════
+   STATE — with localStorage
+   ═══════════════════════════════════════════════════════ */
+const state = {
+  lang: localStorage.getItem('pylearn.lang') || 'ur',
+  currentTopic: parseInt(localStorage.getItem('pylearn.m2.topic') || '0'),
+  skulptReady: false,
+  running: false,
+  userCode: JSON.parse(localStorage.getItem('pylearn.m2.userCode') || '{}'),
+  quizAnswers: JSON.parse(localStorage.getItem('pylearn.m2.quiz') || '{}')
+};
+
+// Validate currentTopic
+if (state.currentTopic < 0 || state.currentTopic >= TOPICS.length || isNaN(state.currentTopic)) {
+  state.currentTopic = 0;
+}
+
+const $ = (id) => document.getElementById(id);
+
+/* ═══════════════════════════════════════════════════════
+   SAVE STATE
+   ═══════════════════════════════════════════════════════ */
+function saveState() {
+  localStorage.setItem('pylearn.m2.topic', state.currentTopic);
+  localStorage.setItem('pylearn.m2.userCode', JSON.stringify(state.userCode));
+  localStorage.setItem('pylearn.m2.quiz', JSON.stringify(state.quizAnswers));
+}
+
+/* ═══════════════════════════════════════════════════════
+   GET CURRENT CODE
+   ═══════════════════════════════════════════════════════ */
+function getCurrentCode() {
+  const topicId = TOPICS[state.currentTopic].id;
+  if (state.userCode[topicId] !== undefined) {
+    return state.userCode[topicId];
+  }
+  return TOPICS[state.currentTopic].code[state.lang];
+}
+
+/* ═══════════════════════════════════════════════════════
+   RENDER TOPIC
+   ═══════════════════════════════════════════════════════ */
+function renderTopic() {
+  const topic = TOPICS[state.currentTopic];
+
+  $('topicNum').textContent = state.currentTopic + 1;
+  $('topicLabel').textContent = `${state.currentTopic + 1} of ${TOPICS.length}`;
+
+  const dotsEl = $('topicDots');
+  dotsEl.innerHTML = '';
+  TOPICS.forEach((_, i) => {
+    const s = document.createElement('span');
+    if (i < state.currentTopic) s.className = 'done';
+    else if (i === state.currentTopic) s.className = 'active';
+    dotsEl.appendChild(s);
+  });
+
+  const headerDotsEl = $('headerDots');
+  headerDotsEl.innerHTML = '';
+  TOPICS.forEach((_, i) => {
+    const s = document.createElement('span');
+    if (i < state.currentTopic) s.className = 'done';
+    else if (i === state.currentTopic) s.className = 'current';
+    headerDotsEl.appendChild(s);
+  });
+  $('headerProgressText').textContent = `${state.currentTopic + 1}/${TOPICS.length}`;
+
+  $('topicBody').innerHTML = topic.body[state.lang];
+
+  const inp = $('codeInput');
+  inp.value = getCurrentCode();
+  inp.dataset.autoCode = state.userCode[topic.id] === undefined ? 'true' : 'false';
+
+  $('prevTopicBtn').disabled = state.currentTopic === 0;
+  $('nextTopicBtn').disabled = state.currentTopic === TOPICS.length - 1;
+}
+
+/* ═══════════════════════════════════════════════════════
+   NEXT / PREV
+   ═══════════════════════════════════════════════════════ */
+$('nextTopicBtn').addEventListener('click', () => {
+  if (state.currentTopic < TOPICS.length - 1) {
+    state.currentTopic++;
+    renderTopic();
+    saveState();
+    document.querySelector('.topic-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+});
+$('prevTopicBtn').addEventListener('click', () => {
+  if (state.currentTopic > 0) {
+    state.currentTopic--;
+    renderTopic();
+    saveState();
+    document.querySelector('.topic-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+});
+
+/* ═══════════════════════════════════════════════════════
+   LANGUAGE
+   ═══════════════════════════════════════════════════════ */
+function setLanguage(lang) {
+  state.lang = lang;
+  localStorage.setItem('pylearn.lang', lang);
+
+  document.body.className = 'lang-' + lang;
+  document.documentElement.lang = lang;
+
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+
+  renderTopic();
+  renderQuiz();
+
+  // Hint — content + label update
+  const hintEl = document.querySelector('.inline-hint');
+  const label = $('hintBtnLabel');
+  if (hintEl && label) {
+    const hintText = 'a = 15\nb = 4\n\nprint("Sum:", a + b)\nprint("Product:", a * b)\nprint("Remainder:", a % b)';
+    hintEl.textContent = '💡 Hint:\n\n' + hintText;
+    label.textContent = 'Hide';
+  } else if (label) {
+    label.textContent = 'Hint';
+  }
+
+  $('videoLang').textContent = lang === 'ur' ? 'ROMAN URDU' : 'ENGLISH';
+  $('videoLangMeta').textContent = lang === 'ur' ? 'Roman Urdu' : 'English';
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+});
+
+/* ═══════════════════════════════════════════════════════
+   TABS
+   ═══════════════════════════════════════════════════════ */
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === 'tab-' + name));
+  document.querySelector('.tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+});
+
+/* ═══════════════════════════════════════════════════════
+   EDITOR
+   ═══════════════════════════════════════════════════════ */
+function initEditor() {
+  const inp = $('codeInput');
+
+  inp.addEventListener('input', () => {
+    const topicId = TOPICS[state.currentTopic].id;
+    state.userCode[topicId] = inp.value;
+    inp.dataset.autoCode = 'false';
+    saveState();
+  });
+
+  inp.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const s = inp.selectionStart;
+      inp.value = inp.value.substring(0, s) + '    ' + inp.value.substring(inp.selectionEnd);
+      inp.selectionStart = inp.selectionEnd = s + 4;
+    }
+  });
+
+  $('runBtn').addEventListener('click', runCode);
+  $('resetBtn').addEventListener('click', resetCode);
+  $('copyBtn').addEventListener('click', copyCode);
+}
+
+function resetCode() {
+  const inp = $('codeInput');
+  const topicId = TOPICS[state.currentTopic].id;
+  delete state.userCode[topicId];
+  inp.value = TOPICS[state.currentTopic].code[state.lang];
+  inp.dataset.autoCode = 'true';
+  $('terminalBody').innerHTML = '<span class="placeholder">>>> Reset. Run dabao.</span>';
+  setStatus($('termStatus'), '', 'Ready');
+  saveState();
+}
+
+/* ═══════════════════════════════════════════════════════
+   COPY CODE
+   ═══════════════════════════════════════════════════════ */
+async function copyCode() {
+  const inp = $('codeInput');
+  const btn = $('copyBtn');
+  const icon = $('copyIcon');
+  const text = $('copyText');
+
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(inp.value);
+    } else {
+      const wasReadonly = inp.readOnly;
+      inp.readOnly = true;
+      inp.select();
+      document.execCommand('copy');
+      inp.readOnly = wasReadonly;
+      inp.blur();
+      window.getSelection().removeAllRanges();
+    }
+
+    btn.classList.add('copied');
+    icon.textContent = '✅';
+    text.textContent = 'Copied!';
+
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      icon.textContent = '📋';
+      text.textContent = 'Copy';
+    }, 2000);
+  } catch (e) {
+    icon.textContent = '❌';
+    text.textContent = 'Failed';
+    setTimeout(() => {
+      icon.textContent = '📋';
+      text.textContent = 'Copy';
+    }, 2000);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   GLOBAL Ctrl+Enter
+   ═══════════════════════════════════════════════════════ */
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    e.preventDefault();
+    if (state.skulptReady && !state.running) runCode();
+  }
+});
+
+/* ═══════════════════════════════════════════════════════
+   SKULPT
+   ═══════════════════════════════════════════════════════ */
+function builtinRead(x) {
+  if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined) {
+    throw "File not found: '" + x + "'";
+  }
+  return Sk.builtinFiles["files"][x];
+}
+
+function initSkulpt() {
+  try {
+    if (typeof Sk === 'undefined') throw new Error('Skulpt not loaded');
+
+    Sk.configure({
+      output: (text) => {
+        if (window.__activeTerminalBody) appendLine(window.__activeTerminalBody, text, '');
+      },
+      read: builtinRead,
+      inputfun: (prompt) => window.prompt(prompt || 'Input:') || '',
+      inputfunTakesPrompt: true,
+      __future__: Sk.python3,
+      execLimit: 8000
+    });
+
+    state.skulptReady = true;
+    $('runBtn').disabled = false;
+    $('runLabel').textContent = 'Run';
+    setStatus($('termStatus'), '', 'Ready');
+    $('terminalBody').innerHTML = '<span class="placeholder">>>> Ready. Run dabao.</span>';
+  } catch (e) {
+    console.error(e);
+    setStatus($('termStatus'), 'error', 'Load failed');
+    $('terminalBody').innerHTML = '<span class="err">❌ Python engine load nahi hua.</span>';
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   TERMINAL
+   ═══════════════════════════════════════════════════════ */
+function appendLine(body, text, cls = '') {
+  const span = document.createElement('span');
+  span.style.display = 'block';
+  if (cls) span.className = cls;
+  span.textContent = text;
+  body.appendChild(span);
+  body.scrollTop = body.scrollHeight;
+}
+function appendDivider(body) {
+  const d = document.createElement('div');
+  d.className = 'divider';
+  d.textContent = '▶ ' + new Date().toLocaleTimeString();
+  body.appendChild(d);
+}
+function setStatus(el, cls, text) {
+  el.className = 'terminal-status ' + cls;
+  el.textContent = text;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RUN
+   ═══════════════════════════════════════════════════════ */
+async function runCode() {
+  if (!state.skulptReady || state.running) return;
+  state.running = true;
+
+  const inp = $('codeInput');
+  const code = inp.value;
+  const body = $('terminalBody');
+  const statusEl = $('termStatus');
+
+  $('runBtn').disabled = true;
+  setStatus(statusEl, 'running', 'Running…');
+  body.innerHTML = '';
+  appendDivider(body);
+
+  window.__activeTerminalBody = body;
+  const start = performance.now();
+
+  try {
+    await Sk.misceval.asyncToPromise(() =>
+      Sk.importMainWithBody('<stdin>', false, code, true)
+    );
+    const ms = Math.round(performance.now() - start);
+    setStatus(statusEl, '', `Done · ${ms}ms`);
+    appendLine(body, '✓ Program khatam ho gaya', 'success');
+  } catch (err) {
+    const msg = (typeof err === 'string') ? err : String(err);
+    appendLine(body, friendlyError(msg), 'err');
+    setStatus(statusEl, 'error', 'Error');
+  } finally {
+    state.running = false;
+    $('runBtn').disabled = false;
+    window.__activeTerminalBody = null;
+  }
+}
+
+function friendlyError(raw) {
+  if (!raw || !raw.trim()) return '❌ Kuch ghalat hua lekin error clear nahi.';
+
+  const fullText = raw.toLowerCase();
+
+  if (fullText.includes('indentationerror') || fullText.includes('expected an indented block')) {
+    return `❌ Indentation: Spacing ghalat. 4 spaces zaroori.`;
+  }
+  if (fullText.includes('syntaxerror') || fullText.includes('bad input')) {
+    return `❌ SyntaxError: Colon, brackets, quotes check karo.`;
+  }
+  if (fullText.includes('nameerror') || fullText.includes('not defined')) {
+    const name = raw.match(/'([^']+)'/)?.[1] || raw.match(/"([^"]+)"/)?.[1];
+    return `❌ NameError: '${name}' variable nahi mila.`;
+  }
+  if (fullText.includes('attributeerror')) return `❌ AttributeError.`;
+  if (fullText.includes('importerror') || fullText.includes('modulenotfounderror')) return `❌ ImportError: Module nahi mila.`;
+  if (fullText.includes('valueerror')) return `❌ ValueError.`;
+  if (fullText.includes('indexerror')) return `❌ IndexError: List mein yeh index nahi.`;
+  if (fullText.includes('keyerror')) return `❌ KeyError: Dictionary mein yeh key nahi.`;
+  if (fullText.includes('typeerror')) return `❌ TypeError: Type mismatch.`;
+  if (fullText.includes('zerodivisionerror')) return `❌ ZeroDivisionError: Zero se divide nahi.`;
+
+  const last = raw.trim().split('\n').pop();
+  return `❌ ${last}`;
+}
+
+/* ═══════════════════════════════════════════════════════
+   QUIZ
+   ═══════════════════════════════════════════════════════ */
+function renderQuiz() {
+  const container = $('quizContainer');
+  container.innerHTML = '';
+
+  QUIZ.forEach((item, qi) => {
+    const qDiv = document.createElement('div');
+    qDiv.className = 'quiz-q';
+    qDiv.id = 'quiz-q-' + qi;
+
+    const answered = state.quizAnswers[qi] !== undefined;
+    if (answered) {
+      if (state.quizAnswers[qi] === item.answer) qDiv.classList.add('correct');
+      else qDiv.classList.add('wrong');
+    }
+
+    qDiv.innerHTML = `
+      <div class="quiz-q-text">
+        <span class="quiz-q-num">${qi + 1}</span>
+        ${item.q[state.lang]}
+      </div>
+      <div class="quiz-options">
+        ${item.options.map((opt, oi) => `
+          <button class="quiz-opt" data-q="${qi}" data-o="${oi}">
+            <span class="opt-letter">${String.fromCharCode(65 + oi)}</span>
+            <span>${opt}</span>
+          </button>
+        `).join('')}
+      </div>
+    `;
+    container.appendChild(qDiv);
+  });
+
+  container.querySelectorAll('.quiz-opt').forEach(btn => {
+    const qi = parseInt(btn.dataset.q);
+    const oi = parseInt(btn.dataset.o);
+    const item = QUIZ[qi];
+    const answered = state.quizAnswers[qi] !== undefined;
+
+    if (answered) {
+      btn.disabled = true;
+      const selected = state.quizAnswers[qi];
+      if (oi === item.answer) {
+        btn.classList.add('show-correct');
+        if (oi === selected) {
+          btn.classList.remove('show-correct');
+          btn.classList.add('selected-correct');
+        }
+      } else if (oi === selected) {
+        btn.classList.add('selected-wrong');
+      }
+    } else {
+      btn.addEventListener('click', () => answerQuiz(qi, oi));
+    }
+  });
+
+  updateQuizResult();
+}
+
+function answerQuiz(qi, oi) {
+  if (state.quizAnswers[qi] !== undefined) return;
+  state.quizAnswers[qi] = oi;
+  saveState();
+
+  const item = QUIZ[qi];
+  const qDiv = $('quiz-q-' + qi);
+  const correct = oi === item.answer;
+
+  qDiv.classList.add(correct ? 'correct' : 'wrong');
+
+  qDiv.querySelectorAll('.quiz-opt').forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === item.answer) {
+      btn.classList.add(i === oi ? 'selected-correct' : 'show-correct');
+    } else if (i === oi) {
+      btn.classList.add('selected-wrong');
+    }
+  });
+
+  updateQuizResult();
+}
+
+function updateQuizResult() {
+  const answered = Object.keys(state.quizAnswers).length;
+  if (answered < QUIZ.length) {
+    $('quizResult').classList.remove('show');
+    return;
+  }
+
+  let correctCount = 0;
+  QUIZ.forEach((item, qi) => {
+    if (state.quizAnswers[qi] === item.answer) correctCount++;
+  });
+
+  const pct = Math.round((correctCount / QUIZ.length) * 100);
+
+  let emoji, text;
+  if (pct === 100) {
+    emoji = '🏆';
+    text = state.lang === 'ur' ? 'Perfect! Sab sahi!' : 'Perfect! All correct!';
+  } else if (pct >= 80) {
+    emoji = '🎉';
+    text = state.lang === 'ur' ? 'Shabash! Bahut acha!' : 'Excellent! Well done!';
+  } else if (pct >= 60) {
+    emoji = '👍';
+    text = state.lang === 'ur' ? 'Acha! Thodi aur practice!' : 'Good! A bit more practice!';
+  } else if (pct >= 40) {
+    emoji = '💪';
+    text = state.lang === 'ur' ? 'Theek hai, practice karo!' : 'Keep practicing!';
+  } else {
+    emoji = '📚';
+    text = state.lang === 'ur' ? 'Lesson dobara padho.' : 'Review the lesson.';
+  }
+
+  $('scoreEmoji').textContent = emoji;
+  $('scoreText').textContent = text;
+  $('scoreDetail').textContent = `${correctCount}/${QUIZ.length} · ${pct}%`;
+  $('quizResult').classList.add('show');
+
+  // Auto-scroll to result
+  setTimeout(() => {
+    $('quizResult').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 200);
+}
+
+function resetQuiz() {
+  state.quizAnswers = {};
+  saveState();
+  renderQuiz();
+}
+
+/* ═══════════════════════════════════════════════════════
+   HINT — Toggle with language
+   ═══════════════════════════════════════════════════════ */
+function showHint() {
+  const hintText = 'a = 15\nb = 4\n\nprint("Sum:", a + b)\nprint("Product:", a * b)\nprint("Remainder:", a % b)';
+
+  const box = document.querySelector('.challenge-box');
+  const label = $('hintBtnLabel');
+  let hintEl = box.querySelector('.inline-hint');
+
+  if (hintEl) {
+    hintEl.remove();
+    label.textContent = 'Hint';
+  } else {
+    hintEl = document.createElement('div');
+    hintEl.className = 'inline-hint';
+    hintEl.style.cssText = 'margin-top:12px;padding:12px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);border-radius:8px;font-family:var(--mono);font-size:.8rem;color:#34D399;white-space:pre;';
+    hintEl.textContent = '💡 Hint:\n\n' + hintText;
+    box.appendChild(hintEl);
+    label.textContent = 'Hide';
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   BOOT
+   ═══════════════════════════════════════════════════════ */
+initEditor();
+setLanguage(state.lang);  // Calls renderTopic + renderQuiz internally
+initSkulpt();
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    if (typeof Sk === 'undefined' && !state.skulptReady) {
+      setStatus($('termStatus'), 'error', 'Engine unavailable');
+      $('terminalBody').innerHTML = '<span class="err">❌ Python engine load nahi hua. Internet check karo.</span>';
+      $('runLabel').textContent = 'Retry';
+      $('runBtn').disabled = false;
+      $('runBtn').addEventListener('click', () => location.reload(), { once: true });
+    }
+  }, 3000);
+});
+</script>
+
+</body>
+</html>
